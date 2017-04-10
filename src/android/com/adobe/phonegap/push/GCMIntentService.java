@@ -444,7 +444,15 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
          */
         createActions(extras, mBuilder, resources, packageName, notId);
 
-        mNotificationManager.notify(appName, notId, mBuilder.build());
+        Notification mNotification = mBuilder.build();
+
+        /**
+         * Sets insistent
+         */
+
+        setInsistent(extras, mNotification);
+
+        mNotificationManager.notify(appName, notId, mNotification);
     }
 
     private void updateIntent(Intent intent, String callback, Bundle extras, boolean foreground, int notId) {
@@ -452,6 +460,23 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
         intent.putExtra(PUSH_BUNDLE, extras);
         intent.putExtra(FOREGROUND, foreground);
         intent.putExtra(NOT_ID, notId);
+    }
+
+    private void setInsistent(Bundle extras, Notification mNotification) {
+        boolean isInsistent;
+        String payload = extras.getString(PAYLOAD);
+        if (payload != null) {
+            JSONObject payloadJson;
+            try {
+                payloadJson = new JSONObject(payload);
+                isInsistent = payloadJson.getBoolean(INSISTENT);
+                if (isInsistent) {
+                    mNotification.flags |= Notification.FLAG_INSISTENT;
+                }
+            } catch (JSONException e) {
+                Log.w(LOG_TAG, "Error while parsing payload json or insistent flag not present -- skipping insistence");
+            }
+        }
     }
 
     private void createActions(Bundle extras, NotificationCompat.Builder mBuilder, Resources resources, String packageName, int notId) {
