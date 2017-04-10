@@ -62,4 +62,7 @@ public interface PushConstants {
     public static final String INLINE_REPLY = "inlineReply";
     public static final String LOC_KEY = "locKey";
     public static final String LOC_DATA = "locData";
+    public static final String PAYLOAD = "payload";
+    public static final String INSISTENT = "insistent";
+
 }
