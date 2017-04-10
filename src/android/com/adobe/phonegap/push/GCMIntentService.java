@@ -444,6 +444,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
                 isInsistent = payloadJson.getBoolean(INSISTENT);
                 if (isInsistent) {
                     mNotification.flags |= Notification.FLAG_INSISTENT;
+                    Log.d(LOG_TAG, "insistent = true");
                 }
             } catch (JSONException e) {
                 Log.w(LOG_TAG, "Error while parsing payload json or insistent flag not present -- skipping insistence");
